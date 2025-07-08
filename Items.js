@@ -31,6 +31,7 @@ function Items() {
                     <a href="/">Home</a>
                     <a href="/items"><u>Items</u></a>
                     <a href="/orders">Orders</a>
+                    <a href="/EditItems">EditItems</a>
                 </nav>
 
                 {/* Logo */}
