@@ -22,6 +22,7 @@ function Home() {
                 <a href="/">Home</a>
                 <a href="/items">Items</a>
                 <a href="/orders">Orders</a>
+                <a href="/EditItems">EditItems</a>
             </nav>
 
             <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
