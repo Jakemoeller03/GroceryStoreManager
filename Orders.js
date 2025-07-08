@@ -51,6 +51,7 @@ function Orders() {
                     <a href="/">Home</a>
                     <a href="/items">Items</a>
                     <a href="/orders"><u>Orders</u></a>
+                    <a href="/EditItems">EditItems</a>
                 </nav>
 
                 {/* Logo */}
