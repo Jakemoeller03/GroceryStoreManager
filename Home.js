@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import TomatoLogo from '../images/TomatoLogo.png';
+import { NavLink } from 'react-router-dom';
 
 function Home() {
     return (
@@ -15,14 +16,47 @@ function Home() {
 
             <nav style={{
                 display: 'flex',
-                justifyContent: 'space-around',
-                padding: '10px',
+                justifyContent: 'flex-start',
+                gap: '20px',
+                padding: '10px 40px',
                 fontWeight: 'bold'
             }}>
-                <a href="/">Home</a>
-                <a href="/items">Items</a>
-                <a href="/orders">Orders</a>
-                <a href="/EditItems">EditItems</a>
+                <NavLink
+                    to="/"
+                    style={({ isActive }) => ({
+                        textDecoration: isActive ? 'underline' : 'none',
+                        color: isActive ? '#db3d3d' : 'black'
+                    })}
+                >
+                    Home
+                </NavLink>
+                <NavLink
+                    to="/items"
+                    style={({ isActive }) => ({
+                        textDecoration: isActive ? 'underline' : 'none',
+                        color: isActive ? '#db3d3d' : 'black'
+                    })}
+                >
+                    Items
+                </NavLink>
+                <NavLink
+                    to="/orders"
+                    style={({ isActive }) => ({
+                        textDecoration: isActive ? 'underline' : 'none',
+                        color: isActive ? '#db3d3d' : 'black'
+                    })}
+                >
+                    Orders
+                </NavLink>
+                <NavLink
+                    to="/EditItems"
+                    style={({ isActive }) => ({
+                        textDecoration: isActive ? 'underline' : 'none',
+                        color: isActive ? '#db3d3d' : 'black'
+                    })}
+                >
+                    EditItems
+                </NavLink>
             </nav>
 
             <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
@@ -53,7 +87,7 @@ function Home() {
                             cursor: 'pointer'
                         }}>
                             Sign In
-                        </button>-
+                        </button>
                     </Link>
                 </div>
             </div>
