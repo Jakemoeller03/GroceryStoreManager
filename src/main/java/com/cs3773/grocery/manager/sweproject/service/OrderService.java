@@ -4,12 +4,12 @@ import com.cs3773.grocery.manager.sweproject.objects.Item;
 import com.cs3773.grocery.manager.sweproject.objects.order;
 import com.cs3773.grocery.manager.sweproject.repository.ItemRepository;
 import com.cs3773.grocery.manager.sweproject.repository.OrderRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,10 +24,32 @@ public class OrderService {
         this.itemRepository = itemRepository;
     }
 
+    @Transactional
+    public order createOrder(order newOrder) {
+        Set<Integer> itemIds = newOrder.getItems().stream()
+                .filter(Objects::nonNull)
+                .map(Item::getItemID)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+
+        List<Item> attachedItems = itemRepository.findAllById(itemIds);
+
+
+        newOrder.setItems(attachedItems);
+        newOrder.setOrderTime(LocalDateTime.now());
+        newOrder.setOrderStatus(false);
+
+        // Optionally calculate order price
+        long totalPrice = attachedItems.stream().mapToLong(Item::getItemPrice).sum();
+        newOrder.setOrderPrice(totalPrice);
+
+        return orderRepository.save(newOrder);
+    }
+    @Transactional
     public List<order> getAllOrders() {
         return orderRepository.findAll();
     }
-
+    @Transactional
     public order getOrderById(int orderId) {
         return orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found with ID: " + orderId));

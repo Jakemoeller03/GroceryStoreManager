@@ -3,6 +3,7 @@ package com.cs3773.grocery.manager.sweproject.objects;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "item")
 public class Item {
 
     @Id
