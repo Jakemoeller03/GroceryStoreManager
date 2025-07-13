@@ -1,5 +1,6 @@
 import React from 'react';
 import TomatoLogo from '../images/TomatoLogo.png';
+import { NavLink } from 'react-router-dom';
 
 function EditItem() {
     return (
@@ -12,10 +13,49 @@ function EditItem() {
             <div style={{ flexGrow: 1 }}>
 
                 {/* Navbar */}
-                <nav style={{ display: 'flex', justifyContent: 'space-around', padding: '10px', fontWeight: 'bold' }}>
-                    <a href="/">Home</a>
-                    <a href="/items"><u>Items</u></a>
-                    <a href="/orders">Orders</a>
+                <nav style={{
+                    display: 'flex',
+                    justifyContent: 'flex-start',
+                    gap: '20px',
+                    padding: '10px 40px',
+                    fontWeight: 'bold'
+                }}>
+                    <NavLink
+                        to="/"
+                        style={({ isActive }) => ({
+                            textDecoration: isActive ? 'underline' : 'none',
+                            color: isActive ? '#db3d3d' : 'black'
+                        })}
+                    >
+                        Home
+                    </NavLink>
+                    <NavLink
+                        to="/items"
+                        style={({ isActive }) => ({
+                            textDecoration: isActive ? 'underline' : 'none',
+                            color: isActive ? '#db3d3d' : 'black'
+                        })}
+                    >
+                        Items
+                    </NavLink>
+                    <NavLink
+                        to="/orders"
+                        style={({ isActive }) => ({
+                            textDecoration: isActive ? 'underline' : 'none',
+                            color: isActive ? '#db3d3d' : 'black'
+                        })}
+                    >
+                        Orders
+                    </NavLink>
+                    <NavLink
+                        to="/EditItems"
+                        style={({ isActive }) => ({
+                            textDecoration: isActive ? 'underline' : 'none',
+                            color: isActive ? '#db3d3d' : 'black'
+                        })}
+                    >
+                        EditItems
+                    </NavLink>
                 </nav>
 
                 {/* Logo */}
