@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import TomatoLogo from "../images/TomatoLogo.png";
+import { NavLink } from 'react-router-dom';
 
 function Orders() {
     // Generate sample orders data
@@ -47,11 +48,49 @@ function Orders() {
             {/* Page Content */}
             <div style={{ flexGrow: 1 }}>
                 {/* Navbar */}
-                <nav style={{ display: 'flex', justifyContent: 'space-around', padding: '10px', fontWeight: 'bold' }}>
-                    <a href="/">Home</a>
-                    <a href="/items">Items</a>
-                    <a href="/orders"><u>Orders</u></a>
-                    <a href="/EditItems">EditItems</a>
+                <nav style={{
+                    display: 'flex',
+                    justifyContent: 'flex-start',
+                    gap: '20px',
+                    padding: '10px 40px',
+                    fontWeight: 'bold'
+                }}>
+                    <NavLink
+                        to="/"
+                        style={({ isActive }) => ({
+                            textDecoration: isActive ? 'underline' : 'none',
+                            color: isActive ? '#db3d3d' : 'black'
+                        })}
+                    >
+                        Home
+                    </NavLink>
+                    <NavLink
+                        to="/items"
+                        style={({ isActive }) => ({
+                            textDecoration: isActive ? 'underline' : 'none',
+                            color: isActive ? '#db3d3d' : 'black'
+                        })}
+                    >
+                        Items
+                    </NavLink>
+                    <NavLink
+                        to="/orders"
+                        style={({ isActive }) => ({
+                            textDecoration: isActive ? 'underline' : 'none',
+                            color: isActive ? '#db3d3d' : 'black'
+                        })}
+                    >
+                        Orders
+                    </NavLink>
+                    <NavLink
+                        to="/EditItems"
+                        style={({ isActive }) => ({
+                            textDecoration: isActive ? 'underline' : 'none',
+                            color: isActive ? '#db3d3d' : 'black'
+                        })}
+                    >
+                        EditItems
+                    </NavLink>
                 </nav>
 
                 {/* Logo */}
