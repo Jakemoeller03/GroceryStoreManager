@@ -1,16 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TomatoLogo from '../images/TomatoLogo.png';
 import { NavLink } from 'react-router-dom';
 
 function Items() {
-    const allItems = Array.from({ length: 340 }, (_, i) => `Item ${i + 1}`);
-    const itemsPerPage = 50;
-    const totalPages = Math.ceil(allItems.length / itemsPerPage);
-
+    const [allItems, setAllItems] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [sortOption, setSortOption] = useState('default');
 
+    const itemsPerPage = 50;
+
+    useEffect(() => {
+        const fetchItems = async () => {
+            setLoading(true);
+            setError(null);
+
+            let url = 'http://localhost:8081/items';
+
+            if (sortOption === 'nameAsc') url += '?_sort=name&_order=asc';
+            else if (sortOption === 'nameDesc') url += '?_sort=name&_order=desc';
+            else if (sortOption === 'priceAsc') url += '?_sort=price&_order=asc';
+            else if (sortOption === 'priceDesc') url += '?_sort=price&_order=desc';
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Failed to fetch items');
+                const data = await response.json();
+                setAllItems(data);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchItems();
+    }, [sortOption]);
+
+    const filteredItems = allItems.filter(item =>
+        typeof item === 'string'
+            ? item.toLowerCase().includes(searchTerm.toLowerCase())
+            : item.name?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
-    const displayedItems = allItems.slice(startIndex, startIndex + itemsPerPage);
+    const displayedItems = filteredItems.slice(startIndex, startIndex + itemsPerPage);
 
     const goToPage = (page) => {
         if (page >= 1 && page <= totalPages) {
@@ -20,13 +57,9 @@ function Items() {
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-
-            {/* Top Red Bar */}
             <div style={{ backgroundColor: '#db3d3d', height: '30px' }} />
 
-            {/* Page Content */}
             <div style={{ flexGrow: 1 }}>
-
                 {/* Navbar */}
                 <nav style={{
                     display: 'flex',
@@ -35,47 +68,26 @@ function Items() {
                     padding: '10px 40px',
                     fontWeight: 'bold'
                 }}>
-                    <NavLink
-                        to="/"
-                        style={({ isActive }) => ({
-                            textDecoration: isActive ? 'underline' : 'none',
-                            color: isActive ? '#db3d3d' : 'black'
-                        })}
-                    >
-                        Home
-                    </NavLink>
-                    <NavLink
-                        to="/items"
-                        style={({ isActive }) => ({
-                            textDecoration: isActive ? 'underline' : 'none',
-                            color: isActive ? '#db3d3d' : 'black'
-                        })}
-                    >
-                        Items
-                    </NavLink>
-                    <NavLink
-                        to="/orders"
-                        style={({ isActive }) => ({
-                            textDecoration: isActive ? 'underline' : 'none',
-                            color: isActive ? '#db3d3d' : 'black'
-                        })}
-                    >
-                        Orders
-                    </NavLink>
-                    <NavLink
-                        to="/EditItems"
-                        style={({ isActive }) => ({
-                            textDecoration: isActive ? 'underline' : 'none',
-                            color: isActive ? '#db3d3d' : 'black'
-                        })}
-                    >
-                        EditItems
-                    </NavLink>
+                    {['/', '/items', '/orders', '/EditItems'].map((path, i) => {
+                        const names = ['Home', 'Items', 'Orders', 'EditItems'];
+                        return (
+                            <NavLink
+                                key={path}
+                                to={path}
+                                style={({ isActive }) => ({
+                                    textDecoration: isActive ? 'underline' : 'none',
+                                    color: isActive ? '#db3d3d' : 'black'
+                                })}
+                            >
+                                {names[i]}
+                            </NavLink>
+                        );
+                    })}
                 </nav>
 
                 {/* Logo */}
-                <div style={{ display: 'flex', justifyContent: 'center', margin: '10px 0' }}>
-                    <img src={TomatoLogo} alt="Tomato Logo" style={{ width: '60px', height: '60px' }} />
+                <div style={{ display: 'flex', justifyContent: 'center', margin: '-40px 0 10px 0' }}>
+                    <img src={TomatoLogo} alt="Tomato Logo" style={{ width: '120px', height: '120px' }} />
                 </div>
 
                 {/* Search */}
@@ -92,6 +104,8 @@ function Items() {
                         <input
                             type="text"
                             placeholder="Hinted search text"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
                             style={{
                                 flexGrow: 1,
                                 border: 'none',
@@ -102,6 +116,21 @@ function Items() {
                         />
                         <span style={{ marginLeft: '10px', fontSize: '18px' }}>🔍</span>
                     </div>
+                </div>
+
+                {/* Sort Dropdown */}
+                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '10px' }}>
+                    <select
+                        value={sortOption}
+                        onChange={(e) => setSortOption(e.target.value)}
+                        style={{ padding: '5px 10px', borderRadius: '5px', fontSize: '14px' }}
+                    >
+                        <option value="default">-- Sort Items --</option>
+                        <option value="nameAsc">Name ↑</option>
+                        <option value="nameDesc">Name ↓</option>
+                        <option value="priceAsc">Price ↑</option>
+                        <option value="priceDesc">Price ↓</option>
+                    </select>
                 </div>
 
                 {/* Items List */}
@@ -120,19 +149,23 @@ function Items() {
                         fontWeight: 'bold'
                     }}>
                         <div>List of Items</div>
-
                     </div>
 
-                    {displayedItems.map((item, index) => (
-                        <div key={index} style={{ padding: '5px 0', borderBottom: '1px solid #ddd' }}>
-                            {item}
+                    {loading && <div style={{ textAlign: 'center' }}>Loading...</div>}
+                    {error && <div style={{ color: 'red', textAlign: 'center' }}>{error}</div>}
+                    {!loading && !error && displayedItems.map((item, index) => (
+                        <div
+                            key={index}
+                            style={{ padding: '5px 0', borderBottom: '1px solid #ddd', display: 'flex', justifyContent: 'space-between' }}
+                        >
+                            <span>{typeof item === 'string' ? item : item.name}</span>
+                            <span>${item.price?.toFixed(2)}</span>
                         </div>
                     ))}
                 </div>
-
             </div>
 
-            {/* Bottom Red Bar with Pagination */}
+            {/* Pagination */}
             <div style={{
                 backgroundColor: '#db3d3d',
                 padding: '10px',
@@ -140,12 +173,12 @@ function Items() {
                 justifyContent: 'center',
                 alignItems: 'center'
             }}>
-        <span
-            style={{ marginRight: '20px', color: '#fff', cursor: 'pointer' }}
-            onClick={() => goToPage(currentPage - 1)}
-        >
-          ← Previous
-        </span>
+                <span
+                    style={{ marginRight: '20px', color: '#fff', cursor: 'pointer' }}
+                    onClick={() => goToPage(currentPage - 1)}
+                >
+                    ← Previous
+                </span>
 
                 {[...Array(totalPages).keys()].map((i) => {
                     const pageNum = i + 1;
@@ -164,8 +197,8 @@ function Items() {
                                     cursor: 'pointer'
                                 }}
                             >
-                {pageNum}
-              </span>
+                                {pageNum}
+                            </span>
                         );
                     } else if (pageNum === currentPage - 3 || pageNum === currentPage + 3) {
                         return <span key={pageNum} style={{ color: '#fff' }}>...</span>;
@@ -178,10 +211,9 @@ function Items() {
                     style={{ marginLeft: '20px', color: '#fff', cursor: 'pointer' }}
                     onClick={() => goToPage(currentPage + 1)}
                 >
-          Next →
-        </span>
+                    Next →
+                </span>
             </div>
-
         </div>
     );
 }
