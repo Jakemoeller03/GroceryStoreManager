@@ -5,7 +5,7 @@ import com.cs3773.grocery.manager.sweproject.service.ItemService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin(origins = {"http://localhost:3000", ""})
 @RestController
 @RequestMapping("/items")
 public class ItemController {
