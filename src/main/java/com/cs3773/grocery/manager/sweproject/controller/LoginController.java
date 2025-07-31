@@ -6,7 +6,7 @@ import com.cs3773.grocery.manager.sweproject.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+@CrossOrigin(origins = "http://35.184.41.71/")
 @RestController
 @RequestMapping("/auth")
 public class LoginController {

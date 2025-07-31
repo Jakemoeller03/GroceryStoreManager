@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
+@CrossOrigin(origins = "http://35.184.41.71/")
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
