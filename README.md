@@ -1,7 +1,5 @@
 # Grocery Store Management System API
 
-**Live Demo:** [http://35.184.41.71/](http://35.184.41.71/)
-
 **UI Repository:** [https://github.com/McCGavin/GroceryPages](https://github.com/McCGavin/GroceryPages)
 
 This is a full-stack grocery store management system built with Spring Boot (backend) and React (frontend), deployed on a Google Cloud VM. It allows store staff to manage product listings, handle orders, and maintain inventory with a user-friendly interface.
@@ -122,5 +120,3 @@ The application is deployed on Google Cloud Platform using:
 ---
 
 **Thanks for using the Grocery Store Management System!** 
-
-For questions or support, please refer to the live demo at [http://35.184.41.71/](http://35.184.41.71/)
